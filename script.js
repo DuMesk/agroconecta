@@ -88,58 +88,54 @@ const testimonialInterval = setInterval(() => {
     currentTestimonial = (currentTestimonial + 1) % testimonials.length;
     showTestimonial(currentTestimonial);
 }, 5000);
-
-// =============================================
-// FORMULÁRIO DE CONTATO (CÓDIGO CORRIGIDO)
 // =============================================
 const formContato = document.getElementById('formContato');
 
 if (formContato) {
-    formContato.addEventListener('submit', async function(e) {
+    formContato.addEventListener('submit', async function (e) {
         e.preventDefault();
-        
+
         const submitButton = this.querySelector('button[type="submit"]');
         const originalText = submitButton.textContent;
-        
+
         try {
-            // 1. Preparar dados
+            // 1. Preparar dados do formulário
             const formData = {
-                nome: this.nome.value.trim(),
+                nome: this.name.value.trim(),
                 email: this.email.value.trim(),
-                telefone: this.telefone.value.trim() || 'Não informado',
-                negocio: this.negocio.value,
-                mensagem: this.mensagem.value.trim()
+                telefone: this.phone.value.trim() || 'Não informado',
+                negocio: this.business.value,
+                mensagem: this.message.value.trim()
             };
 
-            // 2. Validação
+            // 2. Validação básica
             if (!formData.nome || !formData.email || !formData.mensagem) {
-                throw new Error("Por favor, preencha todos os campos obrigatórios.");
+                throw new Error("Por favor, preencha nome, e-mail e mensagem!");
             }
 
-            // 3. Configurar envio
+            // 3. Desabilitar botão e mudar texto
             submitButton.disabled = true;
             submitButton.textContent = "Enviando...";
-            
-            // 4. URL do Google Apps Script (SUA URL)
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbyU5Q1UjZxHqd3hOT6Rwf8mAnvHqTiWrybJt89TL1pRDZd90aP96o7nAcuIH_34gmAL/exec';
-            
-            // 5. Enviar dados (modo no-cors para contornar restrições)
-            const response = await fetch(scriptUrl, {
+
+            // 4. Enviar dados pro Google Apps Script
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbxQimrXlFDTl07keH1oywQJNSXSBP9ith8dLk8b0lz_34oMe56f_8sdxFEqqSjcgRNK/exec';
+
+            await fetch(scriptUrl, {
                 method: 'POST',
-                mode: 'no-cors', // Modo crucial para funcionar
+                mode: 'no-cors', // ignora política de CORS
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
             });
 
-            // 6. Feedback visual
-            alert("Mensagem enviada com sucesso!\nVerifique sua planilha Google.");
+            // 5. Mensagem simulada de sucesso
+            alert("📨 Mensagem enviada com sucesso!");
             this.reset();
 
         } catch (error) {
             console.error("Erro no envio:", error);
-            alert(`Erro: ${error.message}`);
+            alert(`⚠️ ${error.message}`);
         } finally {
             submitButton.disabled = false;
             submitButton.textContent = originalText;
