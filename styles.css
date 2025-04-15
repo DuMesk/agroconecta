@@ -40,7 +40,7 @@ header {
 }
 
 .logo {
-    height: 50px;
+    height: 100px;
 }
 
 nav ul {
@@ -490,7 +490,7 @@ footer {
 }
 
 .footer-logo {
-    height: 50px;
+    height: 100px;
     margin-bottom: 1rem;
 }
 
